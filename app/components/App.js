@@ -4,7 +4,7 @@ import Popular from './Popular';
 import Nav from './Nav'
 import Home from './Home'
 import Battle from './Battle'
-
+import Results from './Results'
 class App extends Component {
   render() {
     return (
@@ -12,7 +12,8 @@ class App extends Component {
       <Nav />
       <Switch>
         <Route  exact path="/"        component={Home}/>
-        <Route  path="/battle"  component={Battle}/>
+        <Route  exact path="/battle"  component={Battle}/>
+        <Route  path="/battle/results"  component={Results}/>
         <Route  path="/popular" component={Popular}/>
         <Route render = {() => {
           return <p> Not found </p>
