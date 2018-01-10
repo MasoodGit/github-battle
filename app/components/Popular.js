@@ -26,7 +26,7 @@ function RepoGrid ({repos}) {
     <ul className='popular-list'>
       {repos.map( ({name, owner, html_url, stargazers_count}, index) => (
         <li key={name} className='popular-item'>
-          <div className='popular-rank'># { index + 1 }</div>
+          <div className='popular-rank'>#{ index + 1 }</div>
           <ul className='space-list-items'>
             <li>
               <img 
