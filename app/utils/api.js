@@ -10,7 +10,7 @@ export const fetchPopularRepos = async (language) => {
   var encodedURI = window.encodeURI(
     `https://api.github.com/search/repositories?q=stars:>1+language:
      ${language}&sort=stars&order=desc&type=Repositories`);
-  const repos = await axios.get(encodedURI)
+  const repos = await axios.get(encodedURI).catch(handleError);
   return repos.data.items
 }
 
