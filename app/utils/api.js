@@ -1,16 +1,17 @@
 import axios from 'axios';
 
-export const battle = (players) => {
-  return axios.all(players.map(getUserData))
-              .then(sortPlayers)
-              .catch(handleError);
+export const battle = async (players) => {
+  const results = await axios.all(players.map(getUserData))
+                             .catch(handleError);
+  return results === null ? results : sortPlayers(results);
 }
 
-export const fetchPopularRepos = (language) => {
+export const fetchPopularRepos = async (language) => {
   var encodedURI = window.encodeURI(
     `https://api.github.com/search/repositories?q=stars:>1+language:
      ${language}&sort=stars&order=desc&type=Repositories`);
-  return axios.get(encodedURI).then(({data}) => data.items);
+  const repos = await axios.get(encodedURI)
+  return repos.data.items
 }
 
 const id = 'CLIENT_ID';
@@ -19,10 +20,12 @@ const params = `?client_id=${id}&client_secret=${sec}`;
 const gitUrl = 'https://api.github.com/users/';
 
 
-const getProfile = (username) => {
+const getProfile = async (username) => {
   const url = `${ gitUrl + username + params}`
   // return axios.get(url).then((user) => user.data); // impicit return
-  return axios.get(url).then(({data}) => data); // destructure with the data property on the user object
+  // return axios.get(url).then(({data}) => data); // destructure with the data property on the user object
+  const profile = await axios.get(url)
+  return profile.data
 }
 
 const getRepos = (username) => {
@@ -62,13 +65,12 @@ const handleError = ( error ) => {
   return null;
 }
 
-const getUserData = (player) => {
-  return axios.all([getProfile(player), getRepos(player)])
-              .then(([profile, repos]) => 
-                ({
-                  profile: profile,
-                  score: calculateScore(profile, repos)
-                }));
+const getUserData = async (player) => {
+  const [profile, repos ] = await axios.all([getProfile(player), getRepos(player)])
+  return  ({
+    profile: profile,
+    score: calculateScore(profile, repos)
+  })
 }
 
 const sortPlayers = (players) => {
