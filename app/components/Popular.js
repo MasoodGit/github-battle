@@ -24,9 +24,9 @@ function SelectLanguage({selectedLanguage, onSelect}) {
 function RepoGrid ({repos}) {
   return (
     <ul className='popular-list'>
-      {repos.map( ({name,owner,name,html_url,stargazers_count}, index) => (
+      {repos.map( ({name, owner, html_url, stargazers_count}, index) => (
         <li key={name} className='popular-item'>
-          <div className='popular-rank'>#{index + 1}</div>
+          <div className='popular-rank'># { index + 1 }</div>
           <ul className='space-list-items'>
             <li>
               <img 
@@ -37,7 +37,7 @@ function RepoGrid ({repos}) {
             </li>
             <li><a href={html_url}>{name}</a></li>
             <li>@{owner.login}</li>
-            <li>{repo.stargazers_count} stars</li>
+            <li>{stargazers_count} stars</li>
           </ul>
         </li>
         )
@@ -56,17 +56,12 @@ SelectLanguage.propTypes = {
 };
 
 class Popular extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      selectedLanguage: 'All',
-      repos: null
-     };
-    this.updateLanguage = this.updateLanguage.bind(this);
+  state = {
+    selectedLanguage: 'All',
+    repos: null
   }
-
-  updateLanguage(lang) {
-
+  
+  updateLanguage= (lang) => {
     this.setState({ selectedLanguage: lang , repos: null});
     api.fetchPopularRepos(lang).then((repos) => {this.setState({repos})});
   }
