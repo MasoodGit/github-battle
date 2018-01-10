@@ -5,8 +5,7 @@ import Link  from 'react-router-dom'
 import PropTypes from 'prop-types'
 import PlayerPreview from './PlayerPreview'
 
-function Profile (props) {
-  const info = props.info;
+function Profile ({info}) {
   return (<PlayerPreview avatar={info.avatar_url} username={info.login}>
       <ul className="space-list-items">
         {info.name && <li>{info.name}</li>}
@@ -26,13 +25,12 @@ Profile.propTypes = {
   info: PropTypes.object.isRequired
 }
 
-function Player (props) {
-  console.log(`Profiles.......${props.profile.login}`)
+function Player ({label,score,profile}) {
    return(
      <div>
-       <h1>{props.label}</h1>
-       <h3>Score : {props.score}</h3>
-       <Profile info={props.profile}/>
+       <h1>{label}</h1>
+       <h3>Score : {score}</h3>
+       <Profile info={profile}/>
      </div>
    ) 
 }
@@ -56,8 +54,8 @@ class Results extends Component {
   }
 
   componentDidMount () {
-    const players = queryString.parse(this.props.location.search);
-    api.battle([players.playerOneName, players.playerTwoName])
+    const { playerOneName, playerTwoName } = queryString.parse(this.props.location.search);
+    api.battle([playerOneName, playerTwoName])
        .then((results) => {
          if (results === null) {
            return this.setState({
@@ -76,11 +74,8 @@ class Results extends Component {
   }
 
   render() {
-    const error = this.state.error;
-    const winner = this.state.winner;
-    const loser = this.state.loser;
-    const loading = this.state.loading;
-    
+    const {error, winner, loser, loading } = this.state;
+
     if (loading === true) {
       return <p> Loading results .... </p>
     }
